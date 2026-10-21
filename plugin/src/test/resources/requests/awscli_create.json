@@ -1,0 +1,17 @@
+{
+ "method": "POST",
+ "path": "/bk/rec/service%3Dbig/big.ndjson",
+ "query": "uploads",
+ "headers": {
+  "Host": "localhost:9389",
+  "Accept-Encoding": "identity",
+  "x-amz-checksum-algorithm": "CRC64NVME",
+  "User-Agent": "aws-cli/2.37.6 md/awscrt#0.37.0 ua/2.1 os/linux#7.0.0-38-generic md/arch#x86_64 lang/python#3.14.6 md/pyimpl#CPython m/Af,G,Z,E,N,b cfg/retry-mode#standard md/installer#docker sid/71aa7696c71b md/distrib#amzn.2023 md/prompt#off md/command#s3.cp",
+  "X-Amz-Date": "20261014T123637Z",
+  "X-Amz-Content-SHA256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "Authorization": "AWS4-HMAC-SHA256 Credential=AKIDTEST01/20261014/us-east-1/s3/aws4_request, SignedHeaders=host;x-amz-checksum-algorithm;x-amz-content-sha256;x-amz-date, Signature=8f7ac8605ea2110254816d1c8e826eb1d76116638e60c7f2e62b81240a35f3ab",
+  "amz-sdk-invocation-id": "2f145970-7240-4a9e-b45d-7a4d064b59ba",
+  "amz-sdk-request": "attempt=1",
+  "Content-Length": "0"
+ }
+}

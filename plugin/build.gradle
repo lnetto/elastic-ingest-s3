@@ -1,0 +1,67 @@
+plugins {
+    id 'java'
+}
+
+group = 'co.elastic.s3http'
+version = "${pluginVersion}"
+
+java {
+    toolchain { languageVersion = JavaLanguageVersion.of(21) }
+}
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    bundled
+    implementation.extendsFrom bundled
+}
+
+dependencies {
+    // Provided by the Elasticsearch runtime; never bundled.
+    compileOnly "org.elasticsearch:elasticsearch:${esVersion}"
+    // Security extension SPI (roles provider); provided by x-pack-security at runtime.
+    compileOnly("org.elasticsearch.plugin:x-pack-core:${esVersion}") { transitive = false }
+    // lz4-java ships in Elasticsearch's lib/; bundling a second copy would fail the jar-hell check.
+    compileOnly 'at.yawk.lz4:lz4-java:1.11.1'
+    // Pure-Java zstd; bundled.
+    bundled 'io.airlift:aircompressor:0.27'
+
+    testImplementation "org.elasticsearch:elasticsearch:${esVersion}"
+    testImplementation 'at.yawk.lz4:lz4-java:1.11.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.4'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.release = 21
+    options.compilerArgs << '-Xlint:all,-processing,-serial,-try' << '-Werror'
+}
+
+test {
+    useJUnitPlatform()
+    outputs.upToDateWhen { false }
+    testLogging { events 'failed'; exceptionFormat 'full'; showStandardStreams = true }
+}
+
+def descriptor = tasks.register('pluginDescriptor', Copy) {
+    from 'src/main/plugin-metadata'
+    into layout.buildDirectory.dir('plugin-metadata')
+    inputs.property('pluginVersion', project.version)
+    inputs.property('esVersion', esVersion)
+    expand(pluginVersion: project.version, esVersion: esVersion)
+}
+
+tasks.register('bundlePlugin', Zip) {
+    dependsOn jar, descriptor
+    archiveFileName = "ingest-s3-${project.version}-es${esVersion}.zip"
+    destinationDirectory = layout.buildDirectory.dir('distributions')
+    from jar
+    from descriptor
+    from configurations.bundled
+    from('..') {
+        include 'LICENSE', 'NOTICE'
+        rename { "${it}.txt" }
+    }
+}

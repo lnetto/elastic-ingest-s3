@@ -1,0 +1,26 @@
+version: ${s3.template.version}
+_meta:
+  description: Fields the ingest-s3 plugin adds to every line
+  managed: true
+template:
+  mappings:
+    properties:
+      s3:
+        properties:
+          bucket: { type: keyword }
+          key: { type: keyword }
+          line: { type: long }
+          access_key_name: { type: keyword }
+          access_key_id: { type: keyword }
+          etag: { type: keyword }
+          format: { type: keyword }
+          compression: { type: keyword }
+          partition: { type: object, dynamic: true }
+          request:
+            properties:
+              id: { type: keyword }
+              received: { type: date }
+              node: { type: keyword }
+              remote_address: { type: ip, ignore_malformed: true }
+              user_agent: { type: keyword, ignore_above: 1024 }
+              bytes: { type: long }

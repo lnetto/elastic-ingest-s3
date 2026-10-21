@@ -1,0 +1,21 @@
+{
+ "method": "PUT",
+ "path": "/bk/rec/small.ndjson",
+ "query": "",
+ "headers": {
+  "Host": "localhost:9389",
+  "Accept-Encoding": "identity",
+  "x-amz-sdk-checksum-algorithm": "CRC64NVME",
+  "User-Agent": "aws-cli/2.37.6 md/awscrt#0.37.0 ua/2.1 os/linux#7.0.0-38-generic md/arch#x86_64 lang/python#3.14.6 md/pyimpl#CPython m/Af,G,W,Z,E,N,b cfg/retry-mode#standard md/installer#docker sid/ca2d5e060cd5 md/distrib#amzn.2023 md/prompt#off md/command#s3.cp",
+  "Expect": "100-continue",
+  "Transfer-Encoding": "chunked",
+  "Content-Encoding": "aws-chunked",
+  "X-Amz-Trailer": "x-amz-checksum-crc64nvme",
+  "X-Amz-Decoded-Content-Length": "26890",
+  "X-Amz-Date": "20261014T123636Z",
+  "X-Amz-Content-SHA256": "STREAMING-UNSIGNED-PAYLOAD-TRAILER",
+  "Authorization": "AWS4-HMAC-SHA256 Credential=AKIDTEST01/20261014/us-east-1/s3/aws4_request, SignedHeaders=content-encoding;host;x-amz-content-sha256;x-amz-date;x-amz-decoded-content-length;x-amz-sdk-checksum-algorithm;x-amz-trailer, Signature=cd9818fc88079bd642141b374b50f0d9389af5be000c9c4fb08a76faf7c0763f",
+  "amz-sdk-invocation-id": "7a8d038b-9ca2-4424-a973-14c0cfb9bfb6",
+  "amz-sdk-request": "attempt=1"
+ }
+}

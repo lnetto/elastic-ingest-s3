@@ -1,0 +1,20 @@
+version: ${s3.template.version}
+index_patterns: ["logs-s3.*-*"]
+# above Elasticsearch's built-in logs-*-* template (100)
+priority: 142
+data_stream: {}
+allow_auto_create: true
+_meta:
+  description: Data streams of the ingest-s3 plugin (logs-s3.<dataset>-<namespace>). Put your own settings and mappings in the logs-s3@custom component template, your processors in the logs-s3@custom ingest pipeline.
+  managed: true
+composed_of:
+  - logs@mappings
+  - logs@settings
+  - logs-s3@mappings
+  - logs-s3@settings
+  - logs@custom
+  - logs-s3@custom
+  - ecs@mappings
+ignore_missing_component_templates:
+  - logs@custom
+  - logs-s3@custom

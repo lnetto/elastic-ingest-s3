@@ -1,0 +1,6 @@
+ingest-s3
+
+Licensed under the Apache License, Version 2.0 (see LICENSE).
+
+The plugin zip bundles aircompressor (https://github.com/airlift/aircompressor),
+licensed under the Apache License, Version 2.0, for zstd decompression.

@@ -1,0 +1,10 @@
+# The templates and ingest pipeline S3TemplateRegistry installs. Raise "version" whenever one of them changes: the elected master then
+# puts them again (it never overwrites a newer version).
+version: 4
+component-templates:
+  - logs-s3@mappings
+  - logs-s3@settings
+index-templates:
+  - logs-s3@template
+ingest-pipelines:
+  - logs-s3@default-pipeline: {}

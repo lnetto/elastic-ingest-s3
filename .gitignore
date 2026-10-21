@@ -1,0 +1,3 @@
+plugin/build/
+plugin/.gradle/
+__pycache__/

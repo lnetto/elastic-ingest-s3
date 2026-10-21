@@ -1,0 +1,14 @@
+{
+ "method": "POST",
+ "path": "/bk/fb/service=fluentbit/0DKmGXv0.ndjson",
+ "query": "uploads=",
+ "headers": {
+  "Host": "127.0.0.1:9388",
+  "Content-Length": "0",
+  "User-Agent": "aws-fluent-bit-plugin",
+  "x-amz-date": "20261014T124826Z",
+  "x-amz-content-sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "Authorization": "AWS4-HMAC-SHA256 Credential=AKIDTEST01/20261014/us-east-1/s3/aws4_request, SignedHeaders=content-length;host;user-agent;x-amz-content-sha256;x-amz-date, Signature=3f73e273df2165a8dc508583c9642cf424716ea54ce8af8c3b8f87fae3b108d7",
+  "Connection": "keep-alive"
+ }
+}

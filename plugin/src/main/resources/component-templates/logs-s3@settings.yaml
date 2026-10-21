@@ -1,0 +1,8 @@
+version: ${s3.template.version}
+_meta:
+  description: Default pipeline of the ingest-s3 plugin's data streams. logs-s3@custom comes later in the index template and can override it.
+  managed: true
+template:
+  settings:
+    index:
+      default_pipeline: logs-s3@default-pipeline

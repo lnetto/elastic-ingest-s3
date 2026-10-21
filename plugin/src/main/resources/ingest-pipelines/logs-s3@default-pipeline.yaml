@@ -1,0 +1,34 @@
+version: ${s3.template.version}
+_meta:
+  description: Default pipeline of the ingest-s3 plugin's data streams (logs-s3.*-*), installed by the plugin
+  managed: true
+description: >-
+  Default pipeline of logs-s3.*-* (index.default_pipeline in logs-s3@settings). Managed by the ingest-s3 plugin,
+  which replaces it on upgrade: put your processors in the logs-s3@custom pipeline, which this one calls.
+processors:
+  - set:
+      description: If '@timestamp' is missing, set it with the ingest timestamp (as logs@default-pipeline does)
+      field: "@timestamp"
+      copy_from: _ingest.timestamp
+      override: false
+  - pipeline:
+      description: Fleet's hook for every integration's data; doesn't exist unless you create it
+      name: global@custom
+      ignore_missing_pipeline: true
+  - pipeline:
+      description: Your processors for every logs-*-* data stream (what Elasticsearch's logs@default-pipeline calls); doesn't exist unless you create it
+      name: logs@custom
+      ignore_missing_pipeline: true
+  - pipeline:
+      description: Your processors for these streams, such as a reroute of what you recognize; the plugin never creates or changes this pipeline
+      name: logs-s3@custom
+      ignore_missing_pipeline: true
+  - dissect:
+      description: The stream's dataset (logs-<dataset>-<namespace>), kept in ingest metadata (never stored) for the next step
+      field: _index
+      pattern: "%{}-%{_ingest.s3_dataset}-%{}"
+      ignore_failure: true
+  - pipeline:
+      description: Your processors for one dataset, such as logs-s3.cart@custom (it can read {{{_ingest.s3_dataset}}}); doesn't exist unless you create it
+      name: "logs-{{{_ingest.s3_dataset}}}@custom"
+      ignore_missing_pipeline: true

@@ -1,0 +1,79 @@
+# Publishes the plugin to the GitHub release v<pluginVersion>, one zip per Elasticsearch version.
+#  - daily: builds any new Elasticsearch release (>= minEsVersion) the release has no zip for yet
+#  - push to main that bumps pluginVersion: creates the new release, built for every supported version
+#  - manual: Actions → Release → Run workflow
+name: Release
+
+on:
+  schedule:
+    - cron: '17 6 * * *'
+  push:
+    branches: [main]
+    paths: ['plugin/**', 'scripts/**', 'build-plugin.sh']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    outputs:
+      plugin-version: ${{ steps.plan.outputs.plugin-version }}
+      versions: ${{ steps.plan.outputs.versions }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          echo "plugin-version=$(sed -n 's/^pluginVersion=//p' plugin/gradle.properties)" >> "$GITHUB_OUTPUT"
+          versions=$(scripts/missing-es-versions.sh)
+          echo "versions=$versions" >> "$GITHUB_OUTPUT"
+          echo "Elasticsearch versions to build: $versions" >> "$GITHUB_STEP_SUMMARY"
+
+  build:
+    needs: plan
+    if: needs.plan.outputs.versions != '[]'
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        es-version: ${{ fromJSON(needs.plan.outputs.versions) }}
+    steps:
+      - uses: actions/checkout@v4
+      - run: ES_VERSION=${{ matrix.es-version }} ./build-plugin.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: es${{ matrix.es-version }}
+          path: dist/ingest-s3-${{ needs.plan.outputs.plugin-version }}-es${{ matrix.es-version }}.zip
+          if-no-files-found: error
+
+  publish:
+    needs: [plan, build]
+    # publish what built even if some versions failed (an SPI change in a new release, say)
+    if: ${{ !cancelled() && needs.plan.outputs.versions != '[]' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          path: zips
+          merge-multiple: true
+      - env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          TAG: v${{ needs.plan.outputs.plugin-version }}
+        run: |
+          shopt -s nullglob
+          zips=(zips/*.zip)
+          [ ${#zips[@]} -gt 0 ] || { echo "nothing built"; exit 1; }
+          gh release view "$TAG" >/dev/null 2>&1 \
+            || gh release create "$TAG" --target "$GITHUB_SHA" --title "$TAG" --notes ""
+          gh release upload "$TAG" "${zips[@]}"
+          # refresh the supported-versions table
+          gh release edit "$TAG" --notes "$(scripts/release-notes.sh "$TAG")"

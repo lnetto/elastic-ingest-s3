@@ -1,0 +1,16 @@
+{
+ "method": "POST",
+ "path": "/bk/rec/service%3Dbig/big.ndjson",
+ "query": "uploadId=UP1",
+ "headers": {
+  "Host": "localhost:9389",
+  "Accept-Encoding": "identity",
+  "User-Agent": "aws-cli/2.37.6 md/awscrt#0.37.0 ua/2.1 os/linux#7.0.0-38-generic md/arch#x86_64 lang/python#3.14.6 md/pyimpl#CPython m/Af,G,Z,E,N,b cfg/retry-mode#standard md/installer#docker sid/71aa7696c71b md/distrib#amzn.2023 md/prompt#off md/command#s3.cp",
+  "X-Amz-Date": "20261014T123637Z",
+  "X-Amz-Content-SHA256": "61a91ce97dfb362fda9a4bc6c73b4ff2fda97676d690c3954d3b7cbd15449eb7",
+  "Authorization": "AWS4-HMAC-SHA256 Credential=AKIDTEST01/20261014/us-east-1/s3/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=d9239964740588185cd095e1ef68ac815b506e786909d6b01b5f423fba456324",
+  "amz-sdk-invocation-id": "b10ecbca-4068-4cba-8fb7-676239c0062e",
+  "amz-sdk-request": "attempt=1",
+  "Content-Length": "443"
+ }
+}
